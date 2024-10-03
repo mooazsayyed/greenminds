@@ -9,7 +9,7 @@ function Dashboard() {
     useEffect(()=> {
         axios.get('http://localhost:3001/dashboard')
         .then(res => {
-            console.log("dashboad: " + res.data);
+            console.log("dashboard: " + res.data);
             if(res.data === "Success") {
                 setSuc("Successded OK")
             } else {
