@@ -4,6 +4,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const cookieParser = require('cookie-parser');  // Use cookie-parser to parse cookies
 const dotenv = require('dotenv');
+const { verifyUser } = require('./controllers/userController');
 
 const app = express();
 
@@ -48,9 +49,10 @@ app.use(express.json());  // Middleware to parse JSON bodies
 // Set up routes
 app.use('/api/users', userRoutes);
 
-app.get('/dashboard', (req, res) => {
-    res.send('Welcome to the dashboard!');
+router.get('/dashboard', verifyUser, (req, res) => {
+    res.send('Welcome to the dashboard!'); // Send welcome message for authorized users
 });
+
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -63,3 +65,4 @@ const port = process.env.PORT || 3001; // Note: Set to 3001 since the client is 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+module.exports = router;
