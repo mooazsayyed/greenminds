@@ -6,3 +6,5 @@
 
 # Ignore env files
 /server/.env
+
+/client/node_modules/
