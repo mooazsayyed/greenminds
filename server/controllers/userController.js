@@ -62,7 +62,7 @@ exports.loginUser = async (req, res) => {
 
 // Create User
 exports.createUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if all required fields are provided
     if (!name || !email || !password) {
@@ -82,13 +82,14 @@ exports.createUser = async (req, res) => {
         const user = new User({
             name: name,
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            role: role || 'user'  // Default role to 'user' if not provided
         });
 
         const newUser = await user.save();
-        res.status(201).json(newUser);  // Created
+        return res.status(201).json({ message: "User created successfully", user: newUser });  // Created
     } catch (err) {
-        res.status(500).json({ message: err.message });  // Internal server error
+        return res.status(500).json({ message: err.message });  // Internal server error
     }
 };
 

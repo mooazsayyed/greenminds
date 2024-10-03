@@ -3,27 +3,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const cookieParser = require('cookie-parser');  // Use cookie-parser to parse cookies
+const dotenv = require('dotenv');
 
 const app = express();
-const dotenv = require('dotenv');
 
 // Load environment variables from .env file
 dotenv.config();
-
-// CORS configuration
-const corsOptions = {
-    origin: 'http://localhost:3000',  // Allow this origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,  // Allow credentials (cookies, authorization headers)
-};
-
-// Use the CORS middleware with options
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight requests
-
-// Use cookie-parser middleware
-app.use(cookieParser());
-app.use(express.json()); // Middleware to parse JSON bodies
 
 // MongoDB connection variables
 const mongoUsername = process.env.MONGO_USERNAME;
@@ -48,11 +33,29 @@ mongoose.connect(mongoUri, {
     process.exit(1);
 });
 
+// CORS configuration
+const corsOptions = {
+    origin: 'http://localhost:3000',  // Allow this origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,  // Allow credentials (cookies, authorization headers)
+};
+
+// Middleware setup
+app.use(cors(corsOptions));
+app.use(cookieParser());  // Use cookie-parser middleware
+app.use(express.json());  // Middleware to parse JSON bodies
+
 // Set up routes
 app.use('/api/users', userRoutes);
 
 app.get('/dashboard', (req, res) => {
     res.send('Welcome to the dashboard!');
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 // Start the server

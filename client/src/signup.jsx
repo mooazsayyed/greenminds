@@ -7,20 +7,45 @@ function Signup() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3001/api/users/register', { name: name.trim(), email: email.trim(), password: password.trim() })
-            .then((response) => {
-                if (response.status === 200) {
-                    navigate('/login');
-                } else {
-                    console.log('Registration failed:', response.data);
-                }
-            }).catch(err => {
-                console.log('Error:', err.response ? err.response.data : err.message);
+
+        // Input validation
+        if (!name || !email || !password) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/users/register', { 
+                name: name.trim(), 
+                email: email.trim(), 
+                password: password.trim() 
             });
+
+            if (response.status === 201) {
+                alert("Registration successful!");  // Optionally alert the user
+                navigate('/login');
+            } else {
+                console.log('Registration failed:', response.data);
+                alert('Registration failed: ' + response.data.message);
+            }
+        } catch (err) {
+            if (err.response) {
+                console.log('Error Response:', err.response.data); // Log response data
+                alert(err.response.data.message || "An error occurred");
+            } else {
+                console.log('Error Message:', err.message);
+                alert(err.message);
+            }
+        } finally {
+            setLoading(false);  // Reset loading state
+        }
     }
 
     return (
@@ -66,8 +91,8 @@ function Signup() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="btn btn-success w-100 rounded-0">
-                        Register
+                    <button type="submit" className="btn btn-success w-100 rounded-0" disabled={loading}>
+                        {loading ? "Registering..." : "Register"}
                     </button>
                 </form>
                 <p>Already Have an Account</p>
