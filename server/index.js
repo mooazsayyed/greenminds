@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const treeRoutes = require('./routes/treeRoutes'); // Import tree routes
 const cookieParser = require('cookie-parser');  // Use cookie-parser to parse cookies
 const dotenv = require('dotenv');
 const { verifyUser } = require('./controllers/userController');
@@ -49,11 +50,20 @@ app.use(express.json());  // Middleware to parse JSON bodies
 
 // Set up routes
 app.use('/api/users', userRoutes);
+app.use('/api', treeRoutes); // Use tree routes
 
 router.get('/dashboard', verifyUser, (req, res) => {
     res.send('Welcome to the dashboard!'); // Send welcome message for authorized users
 });
-
+app.get('/maindashboard', async (req, res) => {
+    try {
+        res.send("Welcome to Green !");
+        // res.json(trees);
+    } catch (error) {
+        console.error('Error fetching tree data:', error);
+        res.status(500).send('Error fetching tree data');
+    }
+});
 
 // Global error handler
 app.use((err, req, res, next) => {
