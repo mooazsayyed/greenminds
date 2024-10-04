@@ -38,7 +38,7 @@ mongoose.connect(mongoUri, {
 
 // CORS configuration
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://legendary-fiesta-q79jg6wgr6rw24v44-3000.app.github.dev'], // Allow these origins
+    origin: '*', // Allow all origins
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,  // Allow credentials (cookies, authorization headers)
 };
