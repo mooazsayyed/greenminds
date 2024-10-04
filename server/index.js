@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const cookieParser = require('cookie-parser');  // Use cookie-parser to parse cookies
 const dotenv = require('dotenv');
 const { verifyUser } = require('./controllers/userController');
+const router = express.Router();  // This initializes the router
 
 const app = express();
 
