@@ -1,0 +1,143 @@
+/* src/components/MainDashboard.css */
+.dashboard-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.chart-section {
+    margin-bottom: 40px;
+}
+
+.info-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.card p {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.images-section {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.location-section {
+    margin-bottom: 50px;
+}
+
+.images-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    overflow: hidden;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    /* Smooth transition for the sliding effect */
+}
+
+.tree-image {
+    min-width: 210px;
+    /* Set image width */
+    height: 200px;
+    margin-right: 10px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    /* Add zoom and shadow effect */
+}
+
+.tree-image:hover {
+    transform: scale(1.1);
+    /* Zoom in when hovered */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    /* Enhance shadow on hover */
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Darken buttons on hover */
+}
+
+.carousel-button.left {
+    left: 10px;
+}
+
+.carousel-button.right {
+    right: 10px;
+}
+
+.carousel-button:focus {
+    outline: none;
+}
+
+/* Add fade-in animation for images */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.tree-image {
+    animation: fadeIn 1s ease-in-out;
+    /* Apply fade-in effect to images */
+}
+
+/* Responsive Styles for Images Carousel */
+@media (max-width: 768px) {
+    .tree-image {
+        min-width: 150px;
+        height: 150px;
+    }
+
+    .carousel-wrapper {
+        transition: transform 0.5s ease-in-out;
+    }
+}

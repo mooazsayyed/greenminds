@@ -1,24 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
-const treeRoutes = require('./routes/treeRoutes'); // Import tree routes
-const cookieParser = require('cookie-parser');  // Use cookie-parser to parse cookies
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const userRoutes = require('./routes/userRoutes');
+const treeRoutes = require('./routes/treeRoutes');
 const { verifyUser } = require('./controllers/userController');
-const router = express.Router();  // This initializes the router
+const path = require('path'); // Import the path module
+const Deforestation = require('./models/Deforestation');
+const deforestationRoutes = require('./routes/deforestationRoutes');
 
 const app = express();
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
-// MongoDB connection variables
+// MongoDB connection setup
 const mongoUsername = process.env.MONGO_USERNAME;
 const mongoPassword = process.env.MONGO_PASSWORD;
 const dbName = process.env.MONGO_DB_NAME;
 
-// Connect to MongoDB
 if (!mongoUsername || !mongoPassword || !dbName) {
     console.error('Missing MongoDB connection environment variables');
     process.exit(1);
@@ -28,37 +29,38 @@ const mongoUri = `mongodb+srv://${mongoUsername}:${mongoPassword}@cluster0.umozx
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('Connected to MongoDB Atlas');
-}).catch((error) => {
-    console.error('Error connecting to MongoDB Atlas:', error);
-    process.exit(1);
-});
-
-// CORS configuration
-const corsOptions = {
-    origin: '*', // Allow all origins
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,  // Allow credentials (cookies, authorization headers)
-};
+    useUnifiedTopology: true,
+})
+    .then(() => console.log('Connected to MongoDB Atlas'))
+    .catch((error) => {
+        console.error('Error connecting to MongoDB Atlas:', error);
+        process.exit(1);
+    });
 
 // Middleware setup
-app.use(cors(corsOptions));
-app.use(cookieParser());  // Use cookie-parser middleware
-app.use(express.json());  // Middleware to parse JSON bodies
+app.use(cors({
+    origin: 'http://localhost:3000', // Use environment variable for trusted domains in production
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+}));
+app.use(cookieParser());
+app.use(express.json());
 
-// Set up routes
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// API routes
 app.use('/api/users', userRoutes);
-app.use('/api', treeRoutes); // Use tree routes
-
-router.get('/dashboard', verifyUser, (req, res) => {
-    res.send('Welcome to the dashboard!'); // Send welcome message for authorized users
+app.use('/api/trees', treeRoutes);  // Changed to `/trees` for clarity
+app.use('/api/deforestations', deforestationRoutes);
+// Dashboard routes
+app.get('/dashboard', verifyUser, (req, res) => {
+    res.send('Welcome to the dashboard!');
 });
+
 app.get('/maindashboard', async (req, res) => {
     try {
-        res.send("Welcome to Green !");
-        // res.json(trees);
+        res.send('Welcome to Green!');
     } catch (error) {
         console.error('Error fetching tree data:', error);
         res.status(500).send('Error fetching tree data');
@@ -72,8 +74,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const port = process.env.PORT || 3001; // Note: Set to 3001 since the client is on 3000
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-module.exports = router;
