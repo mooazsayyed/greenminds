@@ -1,4 +1,5 @@
-**GreenMinds**
+# **GreenMinds**
+
 GreenMinds is a web application aimed at mapping the greenery and deforestation in a city and allowing volunteers to report their work. This project uses the MERN stack (MongoDB, Express, React, Node.js) for seamless interaction between the client and server.
 
 Clone the Repository
