@@ -1,12 +1,11 @@
-
 GreenMinds
 GreenMinds is a web application aimed at mapping potholes in a city and allowing residents to report their locations. This project uses the MERN stack (MongoDB, Express, React, Node.js) for seamless interaction between the client and server.
 
 Clone the Repository
 To get started, clone the project repository from GitHub:
-''' 
+```
 git clone https://github.com/mooazsayyed/greenminds.git
-'''
+```
 Project Setup
 1. Root Setup
 Navigate to the project directory and initialize the project with npm:
