@@ -1,24 +1,30 @@
-#Stage 1 :BUILD base
-
-FROM node:20.12 AS base-front
+# Stage 1: Build
+FROM node:20.12 AS base-build
 
 WORKDIR /app
 
-COPY package-lock.json package.json ./
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm install 
 
+# Copy the rest of the app's source code
 COPY . .
 
-RUN npm run build
+# Build the React app
+RUN npm run build 
 
-# Stage 2: Serve the React app using NGINX
+# Stage 2: Production
 FROM nginx:alpine
 
-# Copy the built React app from the previous stage to the NGINX HTML directory
-COPY --from=base-front /app/build /usr/share/nginx/html
+# Copy the build files from the first stage to NGINX
+COPY --from=base-build /app/build /usr/share/nginx/html
 
-# Expose port 80 to the outside world
-EXPOSE 3000
+# Copy NGINX configuration file
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
+# Expose port 80
+EXPOSE 80
+
+# Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
