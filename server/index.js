@@ -39,7 +39,7 @@ mongoose.connect(mongoUri, {
 
 // Middleware setup
 app.use(cors({
-    origin: 'http://localhost:3000', // Use environment variable for trusted domains in production
+    origin: '*', // Use environment variable for trusted domains in production
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
