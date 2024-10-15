@@ -1,3 +1,4 @@
+# apiVersion: apps/v1
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,8 +28,9 @@ metadata:
 spec:
   selector:
     app: client-frontend
+  type: NodePort
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000
-  type: LoadBalancer # To expose to the public internet
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      nodePort: 31000
