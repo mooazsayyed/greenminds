@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+  labels:
+    app: client-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-frontend
+  template:
+    metadata:
+      labels:
+        app: client-frontend
+    spec:
+      containers:
+        - name: client-frontend
+          image: mooaz/greenminds-client:v1
+          ports:
+            - containerPort: 80
